@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Lead } from "@/types/database";
 import AdminTable from "@/components/AdminTable";
+import AdminLogout from "@/components/AdminLogout";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -42,9 +43,12 @@ export default async function AdminPage() {
               Admin Dashboard &middot; Lead Management
             </p>
           </div>
-          <div className="text-right">
-            <p className="text-text-muted text-sm">Signed in as</p>
-            <p className="text-white text-sm">{user.email}</p>
+          <div className="flex items-center gap-6">
+            <div className="text-right">
+              <p className="text-text-muted text-sm">Signed in as</p>
+              <p className="text-white text-sm">{user.email}</p>
+            </div>
+            <AdminLogout />
           </div>
         </div>
 

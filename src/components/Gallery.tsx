@@ -66,7 +66,7 @@ export default function Gallery() {
           <p className="text-accent text-xs tracking-[0.3em] uppercase mb-4">
             THE RESIDENCES
           </p>
-          <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-bold text-text mb-4">
+          <h2 className="font-(family-name:--font-playfair) text-4xl md:text-5xl font-bold text-text mb-4">
             Experience Lumens
           </h2>
           <p className="text-text-muted max-w-xl mx-auto">

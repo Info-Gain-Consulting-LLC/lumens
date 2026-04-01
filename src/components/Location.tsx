@@ -23,7 +23,7 @@ export default function Location() {
           <p className="text-accent text-xs tracking-[0.3em] uppercase mb-4">
             FIND US
           </p>
-          <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-bold text-text mb-6">
+          <h2 className="font-(family-name:--font-playfair) text-4xl md:text-5xl font-bold text-text mb-6">
             Perfectly Located in Ruaka
           </h2>
           <p className="text-text-muted leading-relaxed mb-8">
@@ -35,7 +35,7 @@ export default function Location() {
           <div className="space-y-5">
             {locationDetails.map((detail) => (
               <div key={detail.text} className="flex items-center gap-4">
-                <detail.icon className="text-accent text-lg flex-shrink-0" />
+                <detail.icon className="text-accent text-lg shrink-0" />
                 <span className="text-text">{detail.text}</span>
               </div>
             ))}

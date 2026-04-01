@@ -54,7 +54,7 @@ export default function UnitTypes() {
           <p className="text-accent text-xs tracking-[0.3em] uppercase mb-4">
             THE RESIDENCES
           </p>
-          <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-bold text-text mb-4">
+          <h2 className="font-(family-name:--font-playfair) text-4xl md:text-5xl font-bold text-text mb-4">
             Choose Your Home
           </h2>
           <p className="text-text-muted max-w-xl mx-auto">
@@ -74,7 +74,7 @@ export default function UnitTypes() {
               className="bg-background-surface rounded-lg overflow-hidden border-t-4 border-accent"
             >
               {/* Image */}
-              <div className="relative w-full aspect-[4/3]">
+              <div className="relative w-full aspect-4/3">
                 <Image
                   src={unit.image}
                   alt={unit.imageAlt}
@@ -89,7 +89,7 @@ export default function UnitTypes() {
                 <p className="text-accent text-xs tracking-[0.3em] uppercase mb-2">
                   {unit.badge}
                 </p>
-                <h3 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-text mb-6">
+                <h3 className="font-(family-name:--font-playfair) text-2xl font-bold text-text mb-6">
                   {unit.title}
                 </h3>
 
@@ -97,7 +97,7 @@ export default function UnitTypes() {
                 <ul className="space-y-3 mb-8">
                   {unit.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-3">
-                      <FaCheck className="text-accent mt-1 flex-shrink-0 text-sm" />
+                      <FaCheck className="text-accent mt-1 shrink-0 text-sm" />
                       <span className="text-text-muted text-sm">{feature}</span>
                     </li>
                   ))}

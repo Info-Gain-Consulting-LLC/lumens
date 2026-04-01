@@ -31,7 +31,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#0d0d0d]/90 backdrop-blur-md shadow-lg"
+          ? "bg-background/90 backdrop-blur-md shadow-lg"
           : "bg-transparent"
       }`}
     >
@@ -43,7 +43,7 @@ export default function Navbar() {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="font-[family-name:var(--font-playfair)] text-2xl font-bold tracking-widest text-accent"
+          className="font-(family-name:--font-playfair) text-2xl font-bold tracking-widest text-accent"
         >
           LUMENS
         </a>
@@ -82,7 +82,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-[#0d0d0d]/95 backdrop-blur-md border-t border-white/5">
+        <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-white/5">
           <ul className="flex flex-col items-center gap-6 py-8">
             {navLinks.map((link) => (
               <li key={link.href}>

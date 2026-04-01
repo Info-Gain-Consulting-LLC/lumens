@@ -23,7 +23,7 @@ export default function RegisterInterest() {
         <p className="text-accent text-xs tracking-[0.3em] uppercase mb-4">
           LIMITED UNITS AVAILABLE
         </p>
-        <h2 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-bold text-text mb-4">
+        <h2 className="font-(family-name:--font-playfair) text-4xl md:text-5xl font-bold text-text mb-4">
           Register Your Interest
         </h2>
         <p className="text-text-muted mb-12 max-w-lg mx-auto">

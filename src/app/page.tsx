@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -17,7 +18,9 @@ export default function Home() {
       <Gallery />
       <UnitTypes />
       <Location />
-      <RegisterInterest />
+      <Suspense fallback={<div className="py-24 bg-background" />}>
+        <RegisterInterest />
+      </Suspense>
       <Footer />
       <BackToTop />
     </>

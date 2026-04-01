@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(grep -A 20 \"Use \\\\`images.remotePatterns\\\\` instead\" \"c:\\\\Users\\\\gator\\\\Documents\\\\Ruaka Building\\\\lumens\\\\node_modules\\\\next\\\\dist\\\\docs\\\\01-app\\\\02-guides\\\\upgrading\\\\version-16.md\")",
+      "Bash(Params)",
+      "Bash(grep -B 3 -A 10 \"Removed features\\\\|next lint\\\\|`Params` prop\\\\|Scroll Behavior\\\\|Static Exports\" \"c:\\\\Users\\\\gator\\\\Documents\\\\Ruaka Building\\\\lumens\\\\node_modules\\\\next\\\\dist\\\\docs\\\\01-app\\\\02-guides\\\\upgrading\\\\version-16.md\")",
+      "Bash(node scripts/rename-images.mjs)"
+    ]
+  }
+}

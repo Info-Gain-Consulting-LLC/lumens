@@ -6,6 +6,7 @@ import UnitTypes from "@/components/UnitTypes";
 import Location from "@/components/Location";
 import RegisterInterest from "@/components/RegisterInterest";
 import Footer from "@/components/Footer";
+import BackToTop from "@/components/BackToTop";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <Location />
       <RegisterInterest />
       <Footer />
+      <BackToTop />
     </>
   );
 }

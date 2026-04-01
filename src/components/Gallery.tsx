@@ -10,6 +10,9 @@ import { GalleryImage } from "@/types/gallery";
 
 type FilterCategory = "all" | GalleryImage["category"];
 
+const BLUR_DATA_URL =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUE/8QAIhAAAQMEAgMAAAAAAAAAAAAAAQIDBAAFERIhMUH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AsmheYbVKDceQqSpS3ElSlEkkkk5JOTX6KKAq3/2Q==";
+
 const filterButtons: { label: string; value: FilterCategory }[] = [
   { label: "All", value: "all" },
   { label: "Exterior", value: "exterior" },
@@ -58,11 +61,25 @@ export default function Gallery() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedImage, navigateLightbox]);
 
+  // Get current position in filtered list for lightbox counter
+  const currentFilteredIndex =
+    selectedImage !== null
+      ? filteredImages.findIndex(
+          (img) => img.src === galleryImages[selectedImage].src
+        )
+      : -1;
+
   return (
     <section id="gallery" className="py-24 px-6 bg-background">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <p className="text-accent text-xs tracking-[0.3em] uppercase mb-4">
             THE RESIDENCES
           </p>
@@ -72,10 +89,19 @@ export default function Gallery() {
           <p className="text-text-muted max-w-xl mx-auto">
             A curated look at every detail of your future home
           </p>
-        </div>
+          <p className="text-text-muted/60 text-sm mt-2">
+            16 Curated Renders
+          </p>
+        </motion.div>
 
         {/* Filter Tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        <motion.div
+          className="flex flex-wrap justify-center gap-3 mb-12"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           {filterButtons.map((btn) => (
             <button
               key={btn.value}
@@ -89,15 +115,16 @@ export default function Gallery() {
               {btn.label}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Masonry Grid */}
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
           <AnimatePresence mode="popLayout">
-            {filteredImages.map((image) => {
+            {filteredImages.map((image, idx) => {
               const globalIndex = galleryImages.findIndex(
                 (img) => img.src === image.src
               );
+              const isFirst = idx === 0 && activeFilter === "all";
               return (
                 <motion.div
                   key={image.src}
@@ -120,6 +147,10 @@ export default function Gallery() {
                       width={800}
                       height={600}
                       className="w-full h-auto"
+                      placeholder="blur"
+                      blurDataURL={BLUR_DATA_URL}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      {...(isFirst ? { preload: true } : { loading: "lazy" })}
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-end">
                       <p className="text-accent text-sm font-medium p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -145,6 +176,11 @@ export default function Gallery() {
             className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center"
             onClick={() => setSelectedImage(null)}
           >
+            {/* Image Counter */}
+            <p className="absolute top-6 left-6 text-accent text-sm z-10 font-medium">
+              {currentFilteredIndex + 1} / {filteredImages.length}
+            </p>
+
             {/* Close Button */}
             <button
               className="absolute top-6 right-6 text-white text-3xl z-10 hover:text-accent transition-colors"
@@ -175,10 +211,17 @@ export default function Gallery() {
               <FaChevronRight />
             </button>
 
-            {/* Image */}
-            <div
+            {/* Swipeable Image */}
+            <motion.div
               className="relative w-[90vw] h-[85vh]"
               onClick={(e) => e.stopPropagation()}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_e, info) => {
+                if (info.offset.x > 80) navigateLightbox(-1);
+                if (info.offset.x < -80) navigateLightbox(1);
+              }}
             >
               <Image
                 src={galleryImages[selectedImage].src}
@@ -187,12 +230,28 @@ export default function Gallery() {
                 style={{ objectFit: "contain" }}
                 sizes="90vw"
               />
-            </div>
+            </motion.div>
 
             {/* Caption */}
             <p className="text-accent text-lg mt-4 font-medium">
               {galleryImages[selectedImage].caption}
             </p>
+
+            {/* Preload adjacent images */}
+            {currentFilteredIndex > 0 && (
+              <link
+                rel="preload"
+                as="image"
+                href={filteredImages[currentFilteredIndex - 1].src}
+              />
+            )}
+            {currentFilteredIndex < filteredImages.length - 1 && (
+              <link
+                rel="preload"
+                as="image"
+                href={filteredImages[currentFilteredIndex + 1].src}
+              />
+            )}
           </motion.div>
         )}
       </AnimatePresence>

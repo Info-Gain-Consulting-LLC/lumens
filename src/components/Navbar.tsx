@@ -1,19 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { motion } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Units", href: "#units" },
-  { label: "Location", href: "#location" },
-  { label: "Register", href: "#register" },
+  { label: "About", href: "#about", sectionId: "about" },
+  { label: "Gallery", href: "#gallery", sectionId: "gallery" },
+  { label: "Units", href: "#units", sectionId: "units" },
+  { label: "Location", href: "#location", sectionId: "location" },
+  { label: "Register", href: "#register", sectionId: "register" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -21,11 +23,34 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleClick = (href: string) => {
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+
+    navLinks.forEach((link) => {
+      const el = document.getElementById(link.sectionId);
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(link.sectionId);
+          }
+        },
+        { rootMargin: "-40% 0px -40% 0px", threshold: 0 }
+      );
+
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  const handleClick = useCallback((href: string) => {
     setMobileOpen(false);
     const el = document.querySelector(href);
     el?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   return (
     <nav
@@ -54,21 +79,34 @@ export default function Navbar() {
             <li key={link.href}>
               <button
                 onClick={() => handleClick(link.href)}
-                className="text-sm tracking-wide text-text-muted hover:text-accent transition-colors uppercase"
+                className={`text-sm tracking-wide uppercase transition-colors relative pb-1 ${
+                  activeSection === link.sectionId
+                    ? "text-accent"
+                    : "text-text-muted hover:text-accent"
+                }`}
               >
                 {link.label}
+                {activeSection === link.sectionId && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
               </button>
             </li>
           ))}
         </ul>
 
         {/* CTA */}
-        <button
+        <motion.button
           onClick={() => handleClick("#register")}
+          animate={{ scale: [1, 1.03, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           className="hidden md:block px-5 py-2.5 bg-accent text-background text-sm font-medium tracking-wide rounded hover:bg-accent-light transition-colors"
         >
           Register Interest
-        </button>
+        </motion.button>
 
         {/* Mobile Toggle */}
         <button
@@ -88,7 +126,11 @@ export default function Navbar() {
               <li key={link.href}>
                 <button
                   onClick={() => handleClick(link.href)}
-                  className="text-sm tracking-wide text-text-muted hover:text-accent transition-colors uppercase"
+                  className={`text-sm tracking-wide uppercase transition-colors ${
+                    activeSection === link.sectionId
+                      ? "text-accent"
+                      : "text-text-muted hover:text-accent"
+                  }`}
                 >
                   {link.label}
                 </button>

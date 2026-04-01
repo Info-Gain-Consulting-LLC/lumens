@@ -1,8 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { FaChevronDown } from "react-icons/fa";
 
 export default function Hero() {
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const { scrollY } = useScroll();
+  const videoY = useTransform(scrollY, [0, 1000], [0, 300]);
+
   const scrollToRegister = () => {
     const el = document.querySelector("#register");
     el?.scrollIntoView({ behavior: "smooth" });
@@ -10,16 +16,29 @@ export default function Hero() {
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* Video Background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/video/hero.mp4" type="video/mp4" />
-      </video>
+      {/* Video Loading Fallback */}
+      {!videoLoaded && (
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(to bottom, #0d0d0d, #1a3a2a)",
+          }}
+        />
+      )}
+
+      {/* Video Background with Parallax */}
+      <motion.div className="absolute inset-0" style={{ y: videoY }}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          onCanPlayThrough={() => setVideoLoaded(true)}
+          className="w-full h-[130%] object-cover"
+        >
+          <source src="/video/hero.mp4" type="video/mp4" />
+        </video>
+      </motion.div>
 
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/60" />
@@ -29,7 +48,7 @@ export default function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
           className="text-accent text-xs tracking-[0.3em] uppercase mb-6"
         >
           Ruaka, Nairobi
@@ -38,8 +57,8 @@ export default function Hero() {
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="font-[family-name:var(--font-playfair)] text-6xl md:text-8xl font-bold text-white tracking-wider mb-6"
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="font-(family-name:--font-playfair) text-6xl md:text-8xl font-bold text-white tracking-wider mb-6"
         >
           LUMENS
         </motion.h1>
@@ -47,7 +66,7 @@ export default function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.8, delay: 0.9 }}
           className="text-text-muted text-lg md:text-xl max-w-2xl mb-10"
         >
           Luxury Residences Along the Limuru Super Highway
@@ -56,7 +75,7 @@ export default function Hero() {
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
           onClick={scrollToRegister}
           className="px-8 py-3.5 bg-accent text-background font-medium tracking-wide rounded hover:bg-accent-light transition-colors"
         >
@@ -68,13 +87,18 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
+        transition={{ delay: 1.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
       >
         <span className="text-text-muted text-xs tracking-widest uppercase">
           Scroll
         </span>
-        <span className="w-px h-8 bg-text-muted/50 animate-pulse" />
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+        >
+          <FaChevronDown className="text-text-muted" />
+        </motion.div>
       </motion.div>
     </section>
   );

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaArrowRight } from "react-icons/fa";
 
 interface UnitCard {
   badge: string;
@@ -10,6 +10,7 @@ interface UnitCard {
   image: string;
   imageAlt: string;
   features: string[];
+  popular?: boolean;
 }
 
 const units: UnitCard[] = [
@@ -32,6 +33,7 @@ const units: UnitCard[] = [
     title: "Two Bedroom Apartment",
     image: "/images/june27-09.jpg",
     imageAlt: "Lumens 2 bedroom apartment lounge",
+    popular: true,
     features: [
       "Spacious open plan living & dining",
       "Fully fitted kitchen with island",
@@ -67,18 +69,26 @@ export default function UnitTypes() {
           {units.map((unit, index) => (
             <motion.div
               key={unit.badge}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: index === 0 ? -40 : 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="bg-background-surface rounded-lg overflow-hidden border-t-4 border-accent"
+              className="bg-background-surface rounded-lg overflow-hidden border-t-4 border-accent relative"
             >
+              {/* Most Popular Badge */}
+              {unit.popular && (
+                <div className="absolute top-4 right-4 z-10 bg-accent text-background text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                  MOST POPULAR
+                </div>
+              )}
+
               {/* Image */}
               <div className="relative w-full aspect-4/3">
                 <Image
                   src={unit.image}
                   alt={unit.imageAlt}
                   fill
+                  preload
                   style={{ objectFit: "cover" }}
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
@@ -95,11 +105,21 @@ export default function UnitTypes() {
 
                 {/* Features */}
                 <ul className="space-y-3 mb-8">
-                  {unit.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3">
+                  {unit.features.map((feature, featureIndex) => (
+                    <motion.li
+                      key={feature}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.3,
+                        delay: featureIndex * 0.08,
+                      }}
+                      className="flex items-start gap-3"
+                    >
                       <FaCheck className="text-accent mt-1 shrink-0 text-sm" />
                       <span className="text-text-muted text-sm">{feature}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
 
@@ -112,15 +132,35 @@ export default function UnitTypes() {
                 </div>
 
                 {/* CTA */}
-                <a
+                <motion.a
                   href="#register"
-                  className="block w-full text-center bg-accent text-background font-medium py-3 rounded-lg hover:bg-accent-light transition-colors duration-300"
+                  className="group block w-full text-center bg-accent text-background font-medium py-3 rounded-lg hover:bg-accent-light transition-colors duration-300 relative overflow-hidden"
+                  whileHover="hover"
                 >
-                  Enquire About This Unit
-                </a>
+                  <span className="inline-flex items-center gap-2">
+                    Enquire About This Unit
+                    <motion.span
+                      variants={{
+                        hover: { x: 0, opacity: 1 },
+                      }}
+                      initial={{ x: -10, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <FaArrowRight className="text-sm" />
+                    </motion.span>
+                  </span>
+                </motion.a>
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Bottom Banner */}
+        <div className="mt-12 bg-background-surface border-y border-primary py-6 rounded-lg text-center">
+          <p className="text-text-muted text-sm max-w-2xl mx-auto px-4">
+            All units feature premium ceramic tile finishes, permanent
+            ventilation, and access to secure basement parking.
+          </p>
         </div>
       </div>
     </section>

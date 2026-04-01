@@ -1,13 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FaMapMarkerAlt, FaRoad, FaCity } from "react-icons/fa";
+import { FaMapMarkerAlt, FaRoad, FaCity, FaExternalLinkAlt } from "react-icons/fa";
 
 const locationDetails = [
   { icon: FaMapMarkerAlt, text: "Ruaka, Kiambu County" },
   { icon: FaRoad, text: "Limuru Super Highway" },
   { icon: FaCity, text: "Easy access to Nairobi CBD & Westlands" },
 ];
+
+const highlights = ["8 Floors", "Limuru Super Highway", "Ruaka, Nairobi"];
 
 export default function Location() {
   return (
@@ -48,18 +50,41 @@ export default function Location() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="rounded-lg overflow-hidden border border-primary"
         >
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.819!2d36.7172!3d-1.2089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3f6b9977631f%3A0x9cd3fbb5bd3e9c55!2sRuaka!5e0!3m2!1sen!2ske!4v1234567890"
-            width="100%"
-            height="400"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Lumens location — Ruaka, Nairobi"
-          />
+          {/* Highlight Pills */}
+          <div className="flex flex-wrap gap-3 mb-4">
+            {highlights.map((h) => (
+              <span
+                key={h}
+                className="border border-primary rounded-full px-4 py-1 text-sm text-accent"
+              >
+                {h}
+              </span>
+            ))}
+          </div>
+
+          <div className="rounded-lg overflow-hidden border border-primary">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.819!2d36.7172!3d-1.2089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3f6b9977631f%3A0x9cd3fbb5bd3e9c55!2sRuaka!5e0!3m2!1sen!2ske!4v1234567890"
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Lumens location — Ruaka, Nairobi"
+            />
+          </div>
+
+          {/* Get Directions */}
+          <a
+            href="https://maps.google.com/?q=Ruaka,Nairobi,Kenya"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-accent text-sm mt-4 hover:text-accent-light transition-colors"
+          >
+            Get Directions <FaExternalLinkAlt className="text-xs" />
+          </a>
         </motion.div>
       </div>
     </section>

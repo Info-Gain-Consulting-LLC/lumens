@@ -55,6 +55,10 @@ public/
 9. Framer Motion for all animations — no CSS keyframe animations.
 10. Sections must have correct IDs: #about #gallery #units #location #register
 
+## Production
+- URL: https://lumens-ruaka.vercel.app
+- Admin: https://lumens-ruaka.vercel.app/admin
+
 ## Commands
 - Dev server:      npm run dev
 - Type check:      npm run type-check
